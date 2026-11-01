@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FlipCard } from './FlipCard';
-import { SummaryDeployerModal } from './SummaryDeployerModal';
 import {
   Compass,
   BookOpen,
@@ -17,9 +16,10 @@ import {
   Zap,
   ChevronLeft,
   ChevronRight,
-  Edit3,
   Lightbulb,
-  ArrowUp
+  ArrowUp,
+  Shield,
+  ExternalLink
 } from 'lucide-react';
 
 export interface FlashCard {
@@ -41,10 +41,12 @@ export interface Book {
   discipline: string;
   category: string;
   color?: string;
+  cover_image?: string;
   read_time?: string;
   tags: string[];
   summary: string;
   chapters: Chapter[];
+  status?: 'published' | 'draft';
   hybrid_score?: number;
   collab_score?: number;
   content_score?: number;
@@ -61,30 +63,19 @@ export interface StashedCard {
   savedAt: string;
 }
 
-export const DeepstashApp: React.FC = () => {
-  const [books, setBooks] = useState<Book[]>(() => {
-    try {
-      const saved = localStorage.getItem('scrollwise_custom_books');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+interface DeepstashAppProps {
+  onOpenAdmin?: () => void;
+}
 
+export const DeepstashApp: React.FC<DeepstashAppProps> = ({ onOpenAdmin }) => {
+  const [books, setBooks] = useState<Book[]>([]);
   const [activeBook, setActiveBook] = useState<Book | null>(null);
   const [activeTab, setActiveTab] = useState<'for_you' | 'library' | 'stash'>('for_you');
   const [activeDiscipline, setActiveDiscipline] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Active card index tracking for each book (for working tabs!)
+  // Active card index tracking for each book (idea tabs)
   const [activeCardByBook, setActiveCardByBook] = useState<Record<string, number>>({});
-
-  // Summary Deployer Modal State
-  const [isDeployerOpen, setIsDeployerOpen] = useState(false);
-  const [bookToEdit, setBookToEdit] = useState<Book | null>(null);
-
-  // Success toast state
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Stash and Likes State (persisted)
   const [stashedCards, setStashedCards] = useState<StashedCard[]>(() => {
@@ -102,7 +93,7 @@ export const DeepstashApp: React.FC = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const mainScrollRef = useRef<HTMLElement>(null);
 
-  // Reading history tracking
+  // Reading history tracking (used strictly by ML recommender)
   const [readHistory, setReadHistory] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem('scrollwise_history');
@@ -121,58 +112,48 @@ export const DeepstashApp: React.FC = () => {
     localStorage.setItem('scrollwise_history', JSON.stringify(readHistory));
   }, [readHistory]);
 
-  // Load books dataset (merging static books.json + custom saved books)
-  useEffect(() => {
+  // Load published books from backend
+  const loadPublishedBooks = () => {
     const savedBookId = localStorage.getItem('scrollwise_active_book_id');
-    fetch('/books.json')
+    
+    // Always fetch published books from server API first
+    fetch('/api/books')
       .then((res) => {
-        if (!res.ok) throw new Error('Static fetch failed');
+        if (!res.ok) throw new Error('API fetch failed');
         return res.json();
       })
       .then((data: Book[]) => {
-        // Merge with local custom books
-        let merged = data;
-        try {
-          const localSaved = localStorage.getItem('scrollwise_custom_books');
-          if (localSaved) {
-            const parsedLocal: Book[] = JSON.parse(localSaved);
-            const localMap = new Map(parsedLocal.map((b) => [b.id, b]));
-            merged = data.map((b) => (localMap.has(b.id) ? localMap.get(b.id)! : b));
-            // Add any custom books not in initial json
-            parsedLocal.forEach((b) => {
-              if (!merged.some((m) => m.id === b.id)) {
-                merged.unshift(b);
-              }
-            });
-          }
-        } catch (e) {
-          console.warn('Error reading local custom books:', e);
-        }
-
-        setBooks(merged);
-        if (merged.length > 0) {
-          const target = (savedBookId && merged.find((b) => b.id === savedBookId)) || merged[0];
+        // Filter strictly to published books
+        const publishedOnly = data.filter((b) => b.status === 'published' || !b.status);
+        setBooks(publishedOnly);
+        if (publishedOnly.length > 0) {
+          const target = (savedBookId && publishedOnly.find((b) => b.id === savedBookId)) || publishedOnly[0];
           setActiveBook(target);
-          fetchRecommendations(target.id, readHistory, merged);
+          fetchRecommendations(target.id, readHistory, publishedOnly);
         }
       })
-      .catch((err) => {
-        console.warn('Fallback to /api/books:', err);
-        fetch('/api/books')
+      .catch(() => {
+        // Fallback to static books.json
+        fetch('/books.json')
           .then((res) => res.json())
           .then((data: Book[]) => {
-            setBooks(data);
-            if (data.length > 0) {
-              const target = (savedBookId && data.find((b) => b.id === savedBookId)) || data[0];
+            const publishedOnly = data.filter((b) => b.status === 'published' || !b.status);
+            setBooks(publishedOnly);
+            if (publishedOnly.length > 0) {
+              const target = (savedBookId && publishedOnly.find((b) => b.id === savedBookId)) || publishedOnly[0];
               setActiveBook(target);
-              fetchRecommendations(target.id, readHistory, data);
+              fetchRecommendations(target.id, readHistory, publishedOnly);
             }
           })
-          .catch((e) => console.error('Failed to load books:', e));
+          .catch((err) => console.error('Failed to load published books:', err));
       });
+  };
+
+  useEffect(() => {
+    loadPublishedBooks();
   }, []);
 
-  // Fetch ML recommendations
+  // Hybrid ML Recommender: Surprise SVD + TF-IDF (Strictly for User Recommendations)
   const fetchRecommendations = async (bookId: string, history: string[], bookList?: Book[]) => {
     try {
       const response = await fetch('/api/recommend', {
@@ -195,7 +176,7 @@ export const DeepstashApp: React.FC = () => {
         return;
       }
     } catch {
-      // offline fallback
+      // Offline fallback
     }
 
     const source = bookList && bookList.length > 0 ? bookList : books;
@@ -221,7 +202,7 @@ export const DeepstashApp: React.FC = () => {
     const rankedList: Book[] = [];
     const addedIds = new Set<string>();
 
-    // 1. If activeBook exists, place at the top
+    // 1. If activeBook exists, prioritize at top
     if (activeBook && bookMap.has(activeBook.id)) {
       rankedList.push({
         ...activeBook,
@@ -230,7 +211,7 @@ export const DeepstashApp: React.FC = () => {
       addedIds.add(activeBook.id);
     }
 
-    // 2. Add recommended books
+    // 2. Add recommended books from ML engine
     recommendations.forEach((rec) => {
       if (!addedIds.has(rec.id) && bookMap.has(rec.id)) {
         const full = bookMap.get(rec.id)!;
@@ -282,48 +263,8 @@ export const DeepstashApp: React.FC = () => {
     return result;
   };
 
-  // Deploy user entered summary onto flashcards
-  const handleDeploySummary = async (updatedBook: Book) => {
-    setBooks((prev) => {
-      const existingIdx = prev.findIndex((b) => b.id === updatedBook.id);
-      let nextList: Book[];
-      if (existingIdx >= 0) {
-        nextList = [...prev];
-        nextList[existingIdx] = updatedBook;
-      } else {
-        nextList = [updatedBook, ...prev];
-      }
-      localStorage.setItem('scrollwise_custom_books', JSON.stringify(nextList));
-      return nextList;
-    });
-
-    setActiveBook(updatedBook);
-    setActiveCardByBook((prev) => ({ ...prev, [updatedBook.id]: 0 }));
-    setActiveTab('for_you');
-    localStorage.setItem('scrollwise_active_book_id', updatedBook.id);
-
-    // Show toast
-    setToastMessage(`✨ Successfully deployed flashcards for "${updatedBook.title}"!`);
-    setTimeout(() => setToastMessage(null), 4000);
-
-    // Persist to backend server if online
-    try {
-      await fetch('/api/books/save', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedBook),
-      });
-    } catch {
-      // offline fallback
-    }
-  };
-
   // Toggle stash for card
-  const toggleStashCard = (
-    book: Book,
-    card: FlashCard,
-    cardIndex: number
-  ) => {
+  const toggleStashCard = (book: Book, card: FlashCard, cardIndex: number) => {
     const cardId = `${book.id}-${cardIndex}`;
     const exists = stashedCards.some(
       (s) => s.id === cardId || (s.bookTitle === book.title && s.front === card.front)
@@ -354,6 +295,7 @@ export const DeepstashApp: React.FC = () => {
       if (!readHistory.includes(book.id)) {
         const nextHist = [book.id, ...readHistory];
         setReadHistory(nextHist);
+        fetchRecommendations(book.id, nextHist);
       }
     }
   };
@@ -402,16 +344,8 @@ ${stashedCards
       {/* Subtle Atmospheric Ambient Glow */}
       <div className="fixed inset-0 bg-radial from-indigo-950/20 via-[#0a0d14]/90 to-[#07090e] pointer-events-none z-0" />
 
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed top-20 right-8 z-50 flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-amber-400 text-black font-bold text-xs shadow-2xl shadow-amber-400/30 animate-fade-in border border-amber-300">
-          <Sparkles className="w-4 h-4 fill-black text-black" />
-          <span>{toastMessage}</span>
-        </div>
-      )}
-
       {/* ======================================================== */}
-      {/* 1. TOP HEADER (Clean, Uncluttered, Purposeful)            */}
+      {/* 1. TOP HEADER (Pure Consumer Discovery Bar)              */}
       {/* ======================================================== */}
       <header className="h-16 border-b border-white/10 bg-black/60 px-4 md:px-8 flex items-center justify-between sticky top-0 z-40 backdrop-blur-xl">
         {/* Left: Brand Logo */}
@@ -430,7 +364,7 @@ ${stashedCards
               <span className="font-extrabold text-lg tracking-tight text-white leading-none">
                 Scroll<span className="text-amber-400">Wise</span>
               </span>
-              <span className="text-[10px] text-white/50 font-medium">Interactive Book Summaries</span>
+              <span className="text-[10px] text-white/50 font-medium">Academic Micro-Learning</span>
             </div>
           </div>
 
@@ -441,24 +375,24 @@ ${stashedCards
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search books, authors, mental models..."
+              placeholder="Search published books, authors, mental models..."
               className="w-full bg-white/5 border border-white/10 rounded-full pl-10 pr-4 py-2 text-xs text-white placeholder:text-white/40 focus:outline-none focus:border-amber-400/60 focus:bg-white/10 transition-all backdrop-blur-md"
             />
           </div>
         </div>
 
-        {/* Right: Enter Book Summary Action Button */}
+        {/* Right: Admin Portal Entry Link */}
         <div className="flex items-center gap-3">
-          <button
-            onClick={() => {
-              setBookToEdit(null);
-              setIsDeployerOpen(true);
-            }}
-            className="flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-black text-xs font-bold shadow-lg shadow-amber-400/20 transition-all transform hover:scale-[1.02] cursor-pointer"
-          >
-            <Sparkles className="w-3.5 h-3.5 fill-black text-black" />
-            <span>Enter Book Summary</span>
-          </button>
+          {onOpenAdmin && (
+            <button
+              onClick={onOpenAdmin}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-xs font-semibold border border-white/10 transition-all cursor-pointer"
+              title="Access Admin Publishing Portal"
+            >
+              <Shield className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden sm:inline">Admin Portal</span>
+            </button>
+          )}
         </div>
       </header>
 
@@ -481,7 +415,7 @@ ${stashedCards
                   setActiveTab('for_you');
                   setActiveDiscipline('all');
                 }}
-                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all text-left ${
+                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all text-left cursor-pointer ${
                   activeTab === 'for_you'
                     ? 'bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30 shadow-lg shadow-amber-400/10'
                     : 'text-white/70 hover:bg-white/10 hover:text-white'
@@ -493,7 +427,7 @@ ${stashedCards
 
               <button
                 onClick={() => setActiveTab('library')}
-                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all text-left ${
+                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all text-left cursor-pointer ${
                   activeTab === 'library'
                     ? 'bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30'
                     : 'text-white/70 hover:bg-white/10 hover:text-white'
@@ -505,7 +439,7 @@ ${stashedCards
 
               <button
                 onClick={() => setActiveTab('stash')}
-                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all text-left ${
+                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all text-left cursor-pointer ${
                   activeTab === 'stash'
                     ? 'bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30'
                     : 'text-white/70 hover:bg-white/10 hover:text-white'
@@ -538,7 +472,7 @@ ${stashedCards
                       setActiveDiscipline(cat.id);
                       if (activeTab === 'stash') setActiveTab('for_you');
                     }}
-                    className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-left transition-colors ${
+                    className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-left transition-colors cursor-pointer ${
                       activeDiscipline === cat.id
                         ? 'bg-white/15 text-white font-semibold'
                         : 'text-white/60 hover:text-white hover:bg-white/5'
@@ -555,15 +489,15 @@ ${stashedCards
           {/* Reading Scholar Badge */}
           <div className="p-4 rounded-2xl bg-black/50 border border-white/10 flex flex-col gap-2.5 backdrop-blur-xl">
             <div className="flex items-center justify-between text-xs">
-              <span className="font-semibold text-white/80">Interactive Flashcards</span>
+              <span className="font-semibold text-white/80">Published Collection</span>
               <span className="text-amber-400 font-bold">{books.length} Books</span>
             </div>
             <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-              <div className="bg-amber-400 h-full w-[80%] rounded-full" />
+              <div className="bg-amber-400 h-full w-[85%] rounded-full" />
             </div>
             <div className="flex items-center gap-2 text-[11px] text-white/50 pt-1">
               <Award className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span>Rank: Master Synthesizer</span>
+              <span>Rank: Active Scholar</span>
             </div>
           </div>
         </aside>
@@ -596,7 +530,7 @@ ${stashedCards
                 {stashedCards.length > 0 && (
                   <button
                     onClick={exportMarkdown}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-400 text-black font-bold text-xs hover:bg-amber-300 transition-all shadow-lg shadow-amber-400/20"
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-400 text-black font-bold text-xs hover:bg-amber-300 transition-all shadow-lg shadow-amber-400/20 cursor-pointer"
                   >
                     <Download className="w-4 h-4" /> Export Markdown (.md)
                   </button>
@@ -612,7 +546,7 @@ ${stashedCards
                   </p>
                   <button
                     onClick={() => setActiveTab('for_you')}
-                    className="mt-2 px-5 py-2 rounded-full bg-white text-black text-xs font-bold hover:bg-white/90"
+                    className="mt-2 px-5 py-2 rounded-full bg-white text-black text-xs font-bold hover:bg-white/90 cursor-pointer"
                   >
                     Browse Feed
                   </button>
@@ -641,7 +575,7 @@ ${stashedCards
                         </span>
                         <button
                           onClick={() => copyTakeaway(card.takeaway, card.id)}
-                          className="text-white/40 hover:text-white transition-colors"
+                          className="text-white/40 hover:text-white transition-colors cursor-pointer"
                           title="Copy Takeaway"
                         >
                           {copiedKey === card.id ? (
@@ -659,7 +593,7 @@ ${stashedCards
           )}
 
           {/* ==================================================== */}
-          {/* VIEW: LIBRARY CATALOG (Browse All Books)              */}
+          {/* VIEW: LIBRARY CATALOG (Browse Published Books)       */}
           {/* ==================================================== */}
           {activeTab === 'library' && (
             <div className="flex flex-col gap-6">
@@ -670,19 +604,12 @@ ${stashedCards
                     Library Catalog
                   </h2>
                   <p className="text-xs text-white/50 mt-1">
-                    Explore distilled summaries and mental models across {books.length} books.
+                    Explore manually curated mental models across {books.length} published books.
                   </p>
                 </div>
-                <button
-                  onClick={() => {
-                    setBookToEdit(null);
-                    setIsDeployerOpen(true);
-                  }}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-400 text-black font-bold text-xs hover:bg-amber-300 transition-all shadow-md"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-black" />
-                  + Add Book Summary
-                </button>
+                <span className="text-xs text-white/40 font-mono">
+                  Showing {rankedBooks.length} Published Titles
+                </span>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -706,24 +633,18 @@ ${stashedCards
                     </div>
 
                     <div className="pt-3 border-t border-white/5 flex items-center justify-between gap-2">
-                      <button
-                        onClick={() => {
-                          setBookToEdit(book);
-                          setIsDeployerOpen(true);
-                        }}
-                        className="text-xs text-white/60 hover:text-amber-300 flex items-center gap-1 font-semibold transition-colors"
-                      >
-                        <Edit3 className="w-3 h-3" /> Edit Summary
-                      </button>
+                      <span className="text-[11px] text-white/40">
+                        {book.chapters?.[0]?.cards?.length || 0} Flashcards
+                      </span>
 
                       <button
                         onClick={() => {
                           setActiveBook(book);
                           setActiveTab('for_you');
                         }}
-                        className="text-xs text-amber-400 font-bold group-hover:translate-x-1 transition-transform"
+                        className="text-xs text-amber-400 font-bold group-hover:translate-x-1 transition-transform cursor-pointer"
                       >
-                        View Flashcards →
+                        Explore Ideas →
                       </button>
                     </div>
                   </div>
@@ -733,7 +654,7 @@ ${stashedCards
           )}
 
           {/* ==================================================== */}
-          {/* VIEW: FOR YOU (Interactive Flashcards with Working Tabs)*/}
+          {/* VIEW: FOR YOU (Feed of Published Books with Tabs)    */}
           {/* ==================================================== */}
           {activeTab === 'for_you' && (
             <div className="flex flex-col gap-8 pb-16">
@@ -746,33 +667,30 @@ ${stashedCards
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-bold text-amber-300 uppercase tracking-wider">
-                        Personalized Book Summaries
+                        Personalized Feed
+                      </span>
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 font-mono font-semibold border border-indigo-500/30">
+                        Hybrid ML Active
                       </span>
                     </div>
                     <h2 className="text-xl font-extrabold text-white tracking-tight mt-0.5">
                       {activeDiscipline === 'all'
                         ? 'For You: Distilled Mental Models & Flashcards'
-                        : `${activeDiscipline}: Interactive Flashcards`}
+                        : `${activeDiscipline}: Curated Flashcards`}
                     </h2>
                     <p className="text-xs text-white/50">
-                      Each card summarizes core principles into flippable, high-impact mental models.
+                      Curated mental models and published ideas, ranked by Hybrid Collaborative & Content ML.
                     </p>
                   </div>
                 </div>
 
-                <button
-                  onClick={() => {
-                    setBookToEdit(null);
-                    setIsDeployerOpen(true);
-                  }}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-amber-300 font-bold text-xs border border-white/15 transition-all shrink-0 cursor-pointer"
-                >
+                <div className="flex items-center gap-2 text-xs text-white/60 bg-white/5 px-3.5 py-1.5 rounded-xl border border-white/10 shrink-0">
                   <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                  <span>+ Deploy My Own Summary</span>
-                </button>
+                  <span>{rankedBooks.length} Books Available</span>
+                </div>
               </div>
 
-              {/* Endless Stream of Complete Book Units with Working Tabs */}
+              {/* Feed of Published Books with Working Tabs */}
               <div className="flex flex-col gap-8">
                 {rankedBooks.map((book) => {
                   const cards = book.chapters?.[0]?.cards || [];
@@ -797,19 +715,27 @@ ${stashedCards
                       key={book.id}
                       className="p-6 md:p-8 rounded-3xl bg-black/60 border border-white/10 flex flex-col gap-5 shadow-2xl backdrop-blur-xl hover:border-white/20 transition-all group"
                     >
-                      {/* 1. Book Header with Clean Avatar & Actions */}
+                      {/* 1. Book Header */}
                       <div className="flex items-center justify-between gap-4">
                         <div className="flex items-center gap-3.5 min-w-0">
-                          {/* Centered, Elegant Book Icon Avatar (No text overlap bug!) */}
+                          {/* Centered, Clean Book Icon Avatar or Cover Image */}
                           <div
-                            className="w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-white shadow-lg shrink-0 border border-white/15"
+                            className="w-12 h-14 rounded-xl flex items-center justify-center font-bold text-white shadow-lg shrink-0 border border-white/15 overflow-hidden"
                             style={{
                               backgroundColor: book.color || '#6366f1',
                               backgroundImage:
                                 'linear-gradient(135deg, rgba(255,255,255,0.3), transparent)',
                             }}
                           >
-                            <BookOpen className="w-5 h-5 text-white" />
+                            {book.cover_image ? (
+                              <img
+                                src={book.cover_image}
+                                alt=""
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <BookOpen className="w-5 h-5 text-white" />
+                            )}
                           </div>
 
                           <div className="flex flex-col min-w-0">
@@ -826,20 +752,8 @@ ${stashedCards
                           </div>
                         </div>
 
-                        {/* Top Right Badges & Edit Button */}
+                        {/* Top Right ML Match Badge */}
                         <div className="flex items-center gap-2 shrink-0">
-                          <button
-                            onClick={() => {
-                              setBookToEdit(book);
-                              setIsDeployerOpen(true);
-                            }}
-                            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 text-white/70 hover:text-white text-xs font-semibold transition-all cursor-pointer"
-                            title="Edit or replace the summary for this book"
-                          >
-                            <Edit3 className="w-3 h-3 text-amber-400" />
-                            <span>Edit Summary</span>
-                          </button>
-
                           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-400/15 border border-amber-400/30 text-amber-300 text-xs font-bold shadow-md">
                             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                             <span>{book.hybrid_score || 94}% Match</span>
@@ -884,7 +798,7 @@ ${stashedCards
                           ))}
                         </div>
 
-                        {/* Animated Progress Bar */}
+                        {/* Progress Bar */}
                         <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden mt-1">
                           <div
                             className="bg-linear-to-r from-amber-400 to-indigo-500 h-full transition-all duration-300"
@@ -895,12 +809,12 @@ ${stashedCards
                         </div>
                       </div>
 
-                      {/* 3. INTERACTIVE 3D FLIPCARD (ALWAYS FLIPPABLE!) */}
+                      {/* 3. INTERACTIVE 3D FLIPCARD */}
                       <div className="relative">
                         <FlipCard
                           key={`${book.id}-${currentIdx}`}
                           height={360}
-                          frontLabel="Core Summary Insight"
+                          frontLabel="Summary Principle"
                           backLabel="Distilled Analysis & Takeaway"
                           front={
                             <div className="flex flex-col justify-between h-full p-2">
@@ -963,7 +877,7 @@ ${stashedCards
                           }
                         />
 
-                        {/* Navigation Chevron Buttons (Next / Prev) */}
+                        {/* Navigation Chevron Buttons */}
                         {cards.length > 1 && (
                           <div className="flex items-center justify-between pt-3">
                             <button
@@ -1003,7 +917,7 @@ ${stashedCards
                         )}
                       </div>
 
-                      {/* 4. Bottom Action Bar: Like, Stash, Share, Edit */}
+                      {/* 4. Bottom Action Bar: Like, Stash, Share */}
                       <div className="flex items-center justify-between pt-3 border-t border-white/10">
                         <div className="flex items-center gap-2">
                           <button
@@ -1052,16 +966,9 @@ ${stashedCards
                           </button>
                         </div>
 
-                        <button
-                          onClick={() => {
-                            setBookToEdit(book);
-                            setIsDeployerOpen(true);
-                          }}
-                          className="text-xs text-white/40 hover:text-amber-300 transition-colors flex items-center gap-1"
-                        >
-                          <Edit3 className="w-3 h-3" />
-                          <span>Customize Summary</span>
-                        </button>
+                        <span className="text-[11px] text-white/40 italic hidden sm:inline">
+                          Idea {currentIdx + 1} of {cards.length}
+                        </span>
                       </div>
                     </div>
                   );
@@ -1097,11 +1004,11 @@ ${stashedCards
                 Recommended For You
               </span>
             </div>
-            <span className="text-[10px] text-white/40">Personalized</span>
+            <span className="text-[10px] text-white/40">Hybrid ML</span>
           </div>
 
           <p className="text-[11px] text-white/50 leading-relaxed -mt-3">
-            Ranked seamlessly by latent reading patterns and discipline affinity.
+            Ranked seamlessly by latent reading patterns (Surprise SVD) & discipline affinity (TF-IDF).
           </p>
 
           {/* Recommendations List */}
@@ -1165,15 +1072,6 @@ ${stashedCards
           </div>
         </aside>
       </div>
-
-      {/* Summary Deployer Modal */}
-      <SummaryDeployerModal
-        isOpen={isDeployerOpen}
-        onClose={() => setIsDeployerOpen(false)}
-        books={books}
-        initialBook={bookToEdit}
-        onDeploy={handleDeploySummary}
-      />
     </div>
   );
 };

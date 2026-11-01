@@ -42,7 +42,9 @@
           }
         ]
       }
-    ]
+    ],
+    "status": "published",
+    "cover_image": ""
   },
   {
     "id": "b2",
@@ -82,7 +84,9 @@
           }
         ]
       }
-    ]
+    ],
+    "status": "published",
+    "cover_image": ""
   },
   {
     "id": "b3",
@@ -122,7 +126,9 @@
           }
         ]
       }
-    ]
+    ],
+    "status": "published",
+    "cover_image": ""
   },
   {
     "id": "b4",
@@ -156,7 +162,9 @@
           }
         ]
       }
-    ]
+    ],
+    "status": "published",
+    "cover_image": ""
   },
   {
     "id": "b5",
@@ -190,7 +198,9 @@
           }
         ]
       }
-    ]
+    ],
+    "status": "published",
+    "cover_image": ""
   },
   {
     "id": "b6",
@@ -225,7 +235,9 @@
           }
         ]
       }
-    ]
+    ],
+    "status": "published",
+    "cover_image": ""
   },
   {
     "id": "b7",
@@ -260,7 +272,9 @@
           }
         ]
       }
-    ]
+    ],
+    "status": "published",
+    "cover_image": ""
   },
   {
     "id": "b8",
@@ -294,7 +308,9 @@
           }
         ]
       }
-    ]
+    ],
+    "status": "published",
+    "cover_image": ""
   },
   {
     "id": "b9",
@@ -328,7 +344,9 @@
           }
         ]
       }
-    ]
+    ],
+    "status": "published",
+    "cover_image": ""
   },
   {
     "id": "b10",
@@ -362,7 +380,9 @@
           }
         ]
       }
-    ]
+    ],
+    "status": "published",
+    "cover_image": ""
   },
   {
     "id": "b11",
@@ -397,7 +417,9 @@
           }
         ]
       }
-    ]
+    ],
+    "status": "published",
+    "cover_image": ""
   },
   {
     "id": "b12",
@@ -426,7 +448,9 @@
           }
         ]
       }
-    ]
+    ],
+    "status": "published",
+    "cover_image": ""
   },
   {
     "id": "b13",
@@ -460,7 +484,9 @@
           }
         ]
       }
-    ]
+    ],
+    "status": "published",
+    "cover_image": ""
   },
   {
     "id": "b14",
@@ -495,7 +521,9 @@
           }
         ]
       }
-    ]
+    ],
+    "status": "published",
+    "cover_image": ""
   },
   {
     "id": "b15",
@@ -530,6 +558,8 @@
           }
         ]
       }
-    ]
+    ],
+    "status": "published",
+    "cover_image": ""
   }
 ]
