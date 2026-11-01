@@ -177,6 +177,36 @@ def recommend():
         "all_ranked": scored_items
     })
 
+@app.route('/api/books/save', methods=['POST'])
+def save_book():
+    try:
+        data = request.get_json(force=True, silent=True) or {}
+        book_id = data.get('id')
+        if not book_id:
+            return jsonify({"error": "Missing book id"}), 400
+
+        global books, book_id_to_item, book_ids
+        existing_index = next((i for i, b in enumerate(books) if b['id'] == book_id), -1)
+        if existing_index >= 0:
+            books[existing_index].update(data)
+        else:
+            books.insert(0, data)
+            book_ids.append(book_id)
+
+        book_id_to_item[book_id] = data
+
+        with open('books.json', 'w', encoding='utf-8') as f:
+            json.dump(books, f, indent=2, ensure_ascii=False)
+        try:
+            with open('public/books.json', 'w', encoding='utf-8') as f:
+                json.dump(books, f, indent=2, ensure_ascii=False)
+        except Exception:
+            pass
+
+        return jsonify({"status": "success", "book": data, "count": len(books)})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/api/health', methods=['GET'])
 def health():
     return jsonify({

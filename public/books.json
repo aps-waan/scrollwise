@@ -7,7 +7,13 @@
     "category": "Cognitive Science",
     "color": "#6366f1",
     "read_time": "4 min",
-    "tags": ["heuristics", "biases", "system-1", "system-2", "decision-making"],
+    "tags": [
+      "heuristics",
+      "biases",
+      "system-1",
+      "system-2",
+      "decision-making"
+    ],
     "summary": "Exploration of two modes of thought: intuitive fast System 1 and deliberative slow System 2.",
     "chapters": [
       {
@@ -15,22 +21,22 @@
         "title": "Two Systems of Mind",
         "cards": [
           {
-            "front": "What is the defining difference between System 1 and System 2?",
+            "front": "Two Systems of Thought: Intuitive Fast vs. Deliberative Slow",
             "back": "System 1 is fast, automatic, emotional, and involuntary. System 2 is slow, deliberate, effortful, and logical.",
             "takeaway": "Cognitive bias thrives when we let intuitive System 1 make complex decisions requiring System 2 auditing."
           },
           {
-            "front": "What is Cognitive Ease and why does it deceive us?",
+            "front": "Cognitive Ease: Why Familiar Claims Feel Inherently True",
             "back": "Cognitive Ease occurs when information feels familiar, clear, and effortless. It makes our brains lower critical defenses and accept claims without scrutiny.",
             "takeaway": "Repeated falsehoods feel familiar, creating the illusion of objective truth."
           },
           {
-            "front": "What does the WYSIATI mental model stand for?",
+            "front": "WYSIATI Principle: What You See Is All There Is",
             "back": "'What You See Is All There Is' — System 1 constructs coherent stories from whatever fragments are immediately available, disregarding unknown evidence.",
             "takeaway": "Never make pivotal strategic choices without actively asking: 'What critical information is completely invisible here?'"
           },
           {
-            "front": "How does the Anchoring Effect bias negotiations?",
+            "front": "The Anchoring Effect: The Invisible Gravity of Initial Numbers",
             "back": "Initial numbers introduced into consideration establish psychological gravity, disproportionately anchoring all subsequent estimates and compromises.",
             "takeaway": "In negotiations or valuation, set the initial anchor first, or immediately debunk an aggressive opposing anchor before proceeding."
           }
@@ -46,7 +52,13 @@
     "category": "Behavioral Economics",
     "color": "#8b5cf6",
     "read_time": "5 min",
-    "tags": ["persuasion", "social-proof", "reciprocity", "scarcity", "authority"],
+    "tags": [
+      "persuasion",
+      "social-proof",
+      "reciprocity",
+      "scarcity",
+      "authority"
+    ],
     "summary": "The six universal principles of ethical and unethical persuasion and behavioral compliance.",
     "chapters": [
       {
@@ -54,17 +66,17 @@
         "title": "Weapons of Influence",
         "cards": [
           {
-            "front": "Why is the Principle of Reciprocity so coercive?",
+            "front": "The Reciprocity Rule: The Compelling Urge to Repay Debts",
             "back": "Human cultures hold a deeply ingrained debt reflex: receiving an uninvited gift creates intense psychological discomfort until repaid with concessions.",
             "takeaway": "Give genuine value first before asking for commitments, or spot when a free favor is actually a compliance trap."
           },
           {
-            "front": "What drives the Social Proof heuristic?",
+            "front": "Social Proof: Looking to the Collective Under Uncertainty",
             "back": "When people are uncertain, they look to the actions of similar peers to determine correct behavior, assuming the collective knows best.",
             "takeaway": "Pluralistic ignorance emerges when a crowd witnesses an emergency and everyone stays passive because no one else is reacting."
           },
           {
-            "front": "How does Commitment & Consistency lock people in?",
+            "front": "Commitment & Consistency: Small Stances Snowballing into Action",
             "back": "Once a person takes even a trivial public stand or small action, immense internal pressure forces them to align future decisions with that initial stance.",
             "takeaway": "The 'foot-in-the-door' technique works by winning microscopic approvals before demanding large commitments."
           }
@@ -80,7 +92,13 @@
     "category": "Self Improvement",
     "color": "#ec4899",
     "read_time": "4 min",
-    "tags": ["habits", "identity", "systems", "1-percent-rule", "dopamine"],
+    "tags": [
+      "habits",
+      "identity",
+      "systems",
+      "1-percent-rule",
+      "dopamine"
+    ],
     "summary": "An easy and proven way to build good habits and break bad ones via compound micro-improvements.",
     "chapters": [
       {
@@ -88,17 +106,17 @@
         "title": "The Fundamentals",
         "cards": [
           {
-            "front": "Why are systems superior to goals?",
+            "front": "Systems Beat Goals: You Fall to the Level of Your Systems",
             "back": "Goals are about the results you want to achieve. Systems are about the processes that lead to those results. Winners and losers have the same goals.",
             "takeaway": "You do not rise to the level of your goals; you fall to the level of your systems."
           },
           {
-            "front": "What are the 4 Laws of Behavior Change?",
+            "front": "The 4 Laws of Behavior Change: Cue, Craving, Response, Reward",
             "back": "Make it Obvious (Cue), Make it Attractive (Craving), Make it Easy (Response), Make it Satisfying (Reward).",
             "takeaway": "To break a bad habit, invert the 4 laws: Make it invisible, unattractive, difficult, and unsatisfying."
           },
           {
-            "front": "What is Identity-Based Habit formation?",
+            "front": "Identity-Based Habits: Changing Who You Are, Not Just What You Do",
             "back": "True behavior change is identity change. You might start a habit because of motivation, but you'll only stick with it if it becomes part of who you are.",
             "takeaway": "Every action you take is a vote for the type of person you wish to become."
           }
@@ -114,7 +132,12 @@
     "category": "Classical Economics",
     "color": "#10b981",
     "read_time": "3 min",
-    "tags": ["opportunity-cost", "unintended-consequences", "seen-vs-unseen", "free-markets"],
+    "tags": [
+      "opportunity-cost",
+      "unintended-consequences",
+      "seen-vs-unseen",
+      "free-markets"
+    ],
     "summary": "Economic analysis distilled to tracing secondary and tertiary impacts on all groups rather than immediate optics.",
     "chapters": [
       {
@@ -122,12 +145,12 @@
         "title": "The Lesson",
         "cards": [
           {
-            "front": "What is the core fallacy in the Broken Window Parable?",
+            "front": "The Broken Window Fallacy: Visible Benefits Mask Invisible Costs",
             "back": "Believing destruction stimulates trade. It accounts for visible income to the glazier, but completely ignores what the baker would have bought if his window weren't broken.",
             "takeaway": "Destruction never creates wealth; it merely diverts scarce capital from productive innovation into maintenance."
           },
           {
-            "front": "What is the true definition of Opportunity Cost?",
+            "front": "Opportunity Cost: The True Price of Every Economic Choice",
             "back": "The real cost of deploying time, labor, or capital into any initiative is the exact value of the next best alternative you had to abandon.",
             "takeaway": "Saying 'yes' to a mediocre project is implicitly saying 'no' to your highest-leverage opportunity."
           }
@@ -143,7 +166,12 @@
     "category": "Behavioral Policy",
     "color": "#14b8a6",
     "read_time": "4 min",
-    "tags": ["choice-architecture", "heuristics", "defaults", "incentives"],
+    "tags": [
+      "choice-architecture",
+      "heuristics",
+      "defaults",
+      "incentives"
+    ],
     "summary": "How subtle shifts in choice architecture guide humans toward healthier, wealthier, and wiser decisions.",
     "chapters": [
       {
@@ -151,12 +179,12 @@
         "title": "Biases & Blunders",
         "cards": [
           {
-            "front": "Why is the Default Option the most powerful tool in product design?",
+            "front": "The Power of Defaults: Designing Environments That Guide Action",
             "back": "Status Quo Bias causes the vast majority of users to stick with pre-selected options, perceiving any switch as cognitive effort or risk.",
             "takeaway": "By making the optimal choice the default (opt-out instead of opt-in), adoption rates often leap from 20% to over 85%."
           },
           {
-            "front": "What separates Libertarian Paternalism from mandates?",
+            "front": "Libertarian Paternalism: Helping People Choose Better Without Mandates",
             "back": "It influences choice architecture to steer behavior in beneficial directions while strictly preserving the freedom to opt out easily and cheaply.",
             "takeaway": "Never restrict choices when you can instead redesign the environment to make good choices frictionless."
           }
@@ -172,7 +200,13 @@
     "category": "Risk & Probability",
     "color": "#06b6d4",
     "read_time": "5 min",
-    "tags": ["antifragility", "black-swan", "skin-in-the-game", "heuristics", "asymmetry"],
+    "tags": [
+      "antifragility",
+      "black-swan",
+      "skin-in-the-game",
+      "heuristics",
+      "asymmetry"
+    ],
     "summary": "Some things benefit from shocks; they thrive and grow when exposed to volatility, randomness, and stress.",
     "chapters": [
       {
@@ -180,12 +214,12 @@
         "title": "The Antifragile Triad",
         "cards": [
           {
-            "front": "What is the difference between Robust and Antifragile?",
+            "front": "Beyond Resilience: Systems That Grow Stronger Under Stress",
             "back": "The resilient or robust resists shocks and stays the same; the antifragile gets better, stronger, and smarter after absorbing stress.",
             "takeaway": "Over-protecting systems from minor volatility makes them fragile to catastrophic Black Swan crashes."
           },
           {
-            "front": "What is the Barbell Strategy in risk management?",
+            "front": "The Barbell Strategy: Extreme Safety Paired with Asymmetric Upside",
             "back": "Playing it safe in 90% of assets (hyper-conservative) while taking high-upside asymmetric bets with the remaining 10% (hyper-aggressive), avoiding the fragile middle.",
             "takeaway": "Eliminate ruin risk completely while maintaining boundless positive convexity."
           }
@@ -201,7 +235,13 @@
     "category": "Behavioral Finance",
     "color": "#f59e0b",
     "read_time": "4 min",
-    "tags": ["wealth", "compounding", "risk", "greed", "financial-freedom"],
+    "tags": [
+      "wealth",
+      "compounding",
+      "risk",
+      "greed",
+      "financial-freedom"
+    ],
     "summary": "Doing well with money has a little to do with how smart you are and a lot to do with how you behave.",
     "chapters": [
       {
@@ -209,12 +249,12 @@
         "title": "Timeless Financial Lessons",
         "cards": [
           {
-            "front": "Why does Warren Buffett attribute 99% of his wealth to compounding rather than raw stock picking?",
+            "front": "The Compounding Flywheel: Time in the Market Beats Raw Timing",
             "back": "Buffett began investing at age 10. Time in the market exponentializes linear gains into astronomical compounding.",
             "takeaway": "The secret to compounding isn't chasing maximum returns; it's surviving downturns consistently without interrupting the curve."
           },
           {
-            "front": "What is the critical distinction between Being Rich and Being Wealthy?",
+            "front": "Being Rich vs. Being Wealthy: Visible Spending vs. Hidden Freedom",
             "back": "Rich is current income and visible spending (cars, jewelry, status symbols). Wealth is options, unspent capital, and freedom over your daily time.",
             "takeaway": "Spending money to show people how much money you have is the fastest way to have less money."
           }
@@ -230,7 +270,12 @@
     "category": "Macro Investing",
     "color": "#eab308",
     "read_time": "5 min",
-    "tags": ["radical-transparency", "idea-meritocracy", "system-design", "feedback-loops"],
+    "tags": [
+      "radical-transparency",
+      "idea-meritocracy",
+      "system-design",
+      "feedback-loops"
+    ],
     "summary": "Systematic rules for decision-making developed at Bridgewater Associates.",
     "chapters": [
       {
@@ -238,12 +283,12 @@
         "title": "Embrace Reality",
         "cards": [
           {
-            "front": "What is Ray Dalio's 5-Step Process for achieving goals?",
+            "front": "The 5-Step Machine: Goals, Problems, Diagnosis, Design, Execution",
             "back": "1. Set clear goals. 2. Identify problems and don't tolerate them. 3. Diagnose root causes. 4. Design plans. 5. Push through to execution.",
             "takeaway": "Most people fail at step 2 and 3 because confronting personal weaknesses triggers painful ego defense mechanisms."
           },
           {
-            "front": "What constitutes an Idea Meritocracy?",
+            "front": "Idea Meritocracy: Radically Transparent & Believability-Weighted Choices",
             "back": "An organization where the best ideas win regardless of title, determined through radical transparency and believability-weighted decision making.",
             "takeaway": "Weight opinions by a person's demonstrated track record and logical coherence, not rank or charisma."
           }
@@ -259,7 +304,12 @@
     "category": "Value Investing",
     "color": "#84cc16",
     "read_time": "5 min",
-    "tags": ["margin-of-safety", "mr-market", "intrinsic-value", "speculation-vs-investing"],
+    "tags": [
+      "margin-of-safety",
+      "mr-market",
+      "intrinsic-value",
+      "speculation-vs-investing"
+    ],
     "summary": "The definitive book on value investing and building a margin of safety against market manic depression.",
     "chapters": [
       {
@@ -267,12 +317,12 @@
         "title": "Core Investing Tenets",
         "cards": [
           {
-            "front": "Who is Mr. Market and what is his lesson?",
+            "front": "The Parable of Mr. Market: Profit from Emotion Rather Than Joining It",
             "back": "Mr. Market is your business partner who shows up every day offering to buy or sell shares at wild price swings. You are free to ignore him or exploit his mood swings.",
             "takeaway": "The market is there to serve you, not to instruct you. Price is what you pay; value is what you get."
           },
           {
-            "front": "What is the Margin of Safety?",
+            "front": "Margin of Safety: Protecting Capital Against Unpredictable Futures",
             "back": "Purchasing assets at a significant discount to their conservatively appraised intrinsic value to protect against errors in estimation and adverse luck.",
             "takeaway": "The secret to sound investment can be condensed into three words: Margin of Safety."
           }
@@ -288,7 +338,12 @@
     "category": "Strategic Management",
     "color": "#3b82f6",
     "read_time": "4 min",
-    "tags": ["kernel-of-strategy", "diagnosis", "focus", "competitive-advantage"],
+    "tags": [
+      "kernel-of-strategy",
+      "diagnosis",
+      "focus",
+      "competitive-advantage"
+    ],
     "summary": "Cutting through empty corporate buzzwords to uncover the essential kernel of true strategic power.",
     "chapters": [
       {
@@ -296,12 +351,12 @@
         "title": "The Kernel of Strategy",
         "cards": [
           {
-            "front": "What are the three pillars of the Kernel of Strategy?",
+            "front": "The Kernel of Strategy: Clear Diagnosis, Guiding Policy, Coherent Actions",
             "back": "1. A Diagnosis (simplifying the challenge). 2. A Guiding Policy (the overarching approach). 3. Coherent Actions (coordinated resource commitments).",
             "takeaway": "A strategy that lacks actionable trade-offs and sacrifice is merely an empty wish list."
           },
           {
-            "front": "How do you instantly identify 'Bad Strategy'?",
+            "front": "Deconstructing Bad Strategy: Mistaking Wishful Thinking for Real Focus",
             "back": "Look for four hallmarks: Fluff (fancy jargon hiding absence of thought), Failure to face challenge, Mistaking goals for strategy, and Bad strategic objectives.",
             "takeaway": "If a plan claims to pursue 15 simultaneous priorities without trade-offs, it has zero strategy."
           }
@@ -317,7 +372,13 @@
     "category": "Startups & Monopoly",
     "color": "#0284c7",
     "read_time": "4 min",
-    "tags": ["monopoly", "defensibility", "first-principles", "technology", "network-effects"],
+    "tags": [
+      "monopoly",
+      "defensibility",
+      "first-principles",
+      "technology",
+      "network-effects"
+    ],
     "summary": "Notes on startups and how to build breakthrough technology that creates new categories.",
     "chapters": [
       {
@@ -325,12 +386,12 @@
         "title": "The Future of Progress",
         "cards": [
           {
-            "front": "What is Peter Thiel's Contrarian Question?",
+            "front": "The Contrarian Secret: Building What Truly Matters That Others Miss",
             "back": "'What important truth do very few people agree with you on?'",
             "takeaway": "Brilliant business ideas usually look like bad or trivial ideas to consensus thinkers, shielding them from early competition."
           },
           {
-            "front": "Why does Thiel argue that Competition is for Losers?",
+            "front": "Monopoly Over Competition: Creating Uncontested Value from 0 to 1",
             "back": "Perfect competition destroys margins and turns products into undifferentiated commodities. Enduring value is captured only by creative monopolies.",
             "takeaway": "Aim to dominate a small, specific niche market first before scaling into adjacent markets."
           }
@@ -346,7 +407,12 @@
     "category": "Disruptive Innovation",
     "color": "#6366f1",
     "read_time": "5 min",
-    "tags": ["disruption", "sustaining-tech", "value-networks", "incumbents"],
+    "tags": [
+      "disruption",
+      "sustaining-tech",
+      "value-networks",
+      "incumbents"
+    ],
     "summary": "Why great firms can fail because they do everything right for existing customers while missing disruptive shifts.",
     "chapters": [
       {
@@ -354,7 +420,7 @@
         "title": "The Mechanics of Disruption",
         "cards": [
           {
-            "front": "What defines Disruptive Innovation versus Sustaining Innovation?",
+            "front": "Disruptive Innovation: Why Market Leaders Fail by Doing Everything Right",
             "back": "Sustaining tech improves product performance for mainstream customers. Disruptive tech starts inferior and cheaper at the low end or in new markets, but steadily improves until it overtakes incumbents.",
             "takeaway": "Incumbents rarely lose because of incompetence; they lose because listening to their best customers makes low-margin disruption look irrational."
           }
@@ -370,7 +436,12 @@
     "category": "Software Craftsmanship",
     "color": "#10b981",
     "read_time": "4 min",
-    "tags": ["refactoring", "single-responsibility", "readability", "design-patterns"],
+    "tags": [
+      "refactoring",
+      "single-responsibility",
+      "readability",
+      "design-patterns"
+    ],
     "summary": "A handbook of agile software craftsmanship and best practices for writing maintainable software.",
     "chapters": [
       {
@@ -378,12 +449,12 @@
         "title": "Meaningful Names & Functions",
         "cards": [
           {
-            "front": "What is the Boy Scout Rule in software engineering?",
+            "front": "The Boy Scout Rule: Always Leave Code Cleaner Than You Found It",
             "back": "'Always leave the campground cleaner than you found it.' Whenever you touch code, make it slightly cleaner than when you opened it.",
             "takeaway": "Continuous micro-refactoring prevents technical debt from accumulating into unmanageable architecture rot."
           },
           {
-            "front": "What is the Single Responsibility Principle (SRP)?",
+            "front": "Single Responsibility Principle: Code Should Do One Thing and Do It Well",
             "back": "A module or function should have one, and only one, reason to change.",
             "takeaway": "Functions should do one thing, do it well, and do it only."
           }
@@ -399,7 +470,13 @@
     "category": "Distributed Systems",
     "color": "#0ea5e9",
     "read_time": "5 min",
-    "tags": ["scalability", "reliability", "maintainability", "replication", "partitioning"],
+    "tags": [
+      "scalability",
+      "reliability",
+      "maintainability",
+      "replication",
+      "partitioning"
+    ],
     "summary": "The fundamental principles, trade-offs, and architectures behind reliable distributed storage and computation systems.",
     "chapters": [
       {
@@ -407,12 +484,12 @@
         "title": "Reliability & Scalability",
         "cards": [
           {
-            "front": "What are the three core design pillars of Data Systems?",
+            "front": "Reliability, Scalability, and Maintainability: The Architectural Trinity",
             "back": "1. Reliability (continues to work correctly under faults). 2. Scalability (handles traffic/data growth gracefully). 3. Maintainability (easy to evolve).",
             "takeaway": "Failures are inevitable in distributed systems; resilience comes from tolerating faults, not pretending they won't occur."
           },
           {
-            "front": "What is the fundamental trade-off in the CAP Theorem?",
+            "front": "The CAP Theorem: Partition Tolerance and the Trade-Off of Consistency",
             "back": "In a network partition (P), you must choose between Consistency (all nodes see latest data) or Availability (every request gets a response).",
             "takeaway": "Network partitions are unavoidable; your architecture must decide whether to fail loud or return potentially stale data."
           }
@@ -428,7 +505,13 @@
     "category": "Stoicism & Mental Resilience",
     "color": "#a855f7",
     "read_time": "4 min",
-    "tags": ["stoicism", "dichotomy-of-control", "resilience", "clarity", "duty"],
+    "tags": [
+      "stoicism",
+      "dichotomy-of-control",
+      "resilience",
+      "clarity",
+      "duty"
+    ],
     "summary": "Private journal entries of the Roman Emperor on self-discipline, mortality, and emotional clarity.",
     "chapters": [
       {
@@ -436,12 +519,12 @@
         "title": "Inner Citadel",
         "cards": [
           {
-            "front": "What is the Stoic Dichotomy of Control?",
+            "front": "The Dichotomy of Control: Mastery Over Perception, Surrender to the Rest",
             "back": "Some things are within our power (beliefs, desires, aversions, actions) and other things are not (reputation, wealth, other people's behavior, fate).",
             "takeaway": "Suffering occurs when we tie our peace of mind to external variables we cannot guarantee."
           },
           {
-            "front": "What does Marcus Aurelius teach about obstacles?",
+            "front": "The Obstacle Is the Way: Transforming Adversity into Fuel for Character",
             "back": "'The impediment to action advances action. What stands in the way becomes the way.'",
             "takeaway": "Every crisis or unfair obstacle is raw material to practice patience, creativity, and virtue."
           }

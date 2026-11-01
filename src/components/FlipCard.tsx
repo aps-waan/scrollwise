@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface FlipCardProps {
   front: React.ReactNode;
@@ -7,12 +7,14 @@ interface FlipCardProps {
   height?: number;
   initialFlipped?: boolean;
   onFlip?: (flipped: boolean) => void;
+  frontLabel?: string;
+  backLabel?: string;
 }
 
 /**
  * ReactBits Micro Flip Card Component
- * https://reactbits.dev/micro/flip-card
- * Pure 3D CSS perspective card flip with smooth spring physics
+ * Enhanced 3D CSS perspective card flip with smooth spring physics
+ * Designed for Interactive Book Summary Flashcards
  */
 export const FlipCard: React.FC<FlipCardProps> = ({
   front,
@@ -21,10 +23,20 @@ export const FlipCard: React.FC<FlipCardProps> = ({
   height = 360,
   initialFlipped = false,
   onFlip,
+  frontLabel = 'Summary Concept',
+  backLabel = 'Distilled Insight & Takeaway',
 }) => {
   const [isFlipped, setIsFlipped] = useState(initialFlipped);
 
-  const toggleFlip = () => {
+  useEffect(() => {
+    setIsFlipped(initialFlipped);
+  }, [initialFlipped]);
+
+  const toggleFlip = (e?: React.MouseEvent) => {
+    // If the click was on an interactive button/link inside the card, don't flip
+    if (e && (e.target as HTMLElement).closest('button, a, input, textarea, select')) {
+      return;
+    }
     const nextState = !isFlipped;
     setIsFlipped(nextState);
     if (onFlip) {
@@ -34,11 +46,10 @@ export const FlipCard: React.FC<FlipCardProps> = ({
 
   return (
     <div
-      className={`flip-card-container relative select-none ${className}`}
+      className={`flip-card-container relative select-none cursor-pointer group ${className}`}
       style={{
         height: `${height}px`,
         perspective: '1200px',
-        cursor: 'pointer',
       }}
       onClick={toggleFlip}
       role="button"
@@ -64,16 +75,18 @@ export const FlipCard: React.FC<FlipCardProps> = ({
           style={{
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
-            background: 'linear-gradient(145deg, rgba(20, 24, 34, 0.7), rgba(10, 12, 18, 0.9))',
+            background: 'linear-gradient(145deg, rgba(20, 24, 34, 0.75), rgba(10, 12, 18, 0.95))',
           }}
         >
           {front}
           <div className="flex items-center justify-between pt-4 border-t border-white/10 text-xs text-white/50">
             <span className="flex items-center gap-1.5 font-medium">
-              <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
-              Core Question
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+              {frontLabel}
             </span>
-            <span className="hover:text-white transition-colors">Click to flip ↻</span>
+            <span className="group-hover:text-amber-300 transition-colors flex items-center gap-1 font-semibold text-white/70">
+              Click card to flip ↻
+            </span>
           </div>
         </div>
 
@@ -84,16 +97,18 @@ export const FlipCard: React.FC<FlipCardProps> = ({
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
             transform: 'rotateY(180deg)',
-            background: 'linear-gradient(145deg, rgba(28, 20, 48, 0.75), rgba(12, 10, 24, 0.9))',
+            background: 'linear-gradient(145deg, rgba(28, 20, 48, 0.8), rgba(12, 10, 24, 0.95))',
           }}
         >
           {back}
-          <div className="flex items-center justify-between pt-4 border-t border-white/10 text-xs text-purple-300/60">
+          <div className="flex items-center justify-between pt-4 border-t border-white/10 text-xs text-purple-300/70">
             <span className="flex items-center gap-1.5 font-medium">
               <span className="w-2 h-2 rounded-full bg-purple-400" />
-              Distilled Mental Model
+              {backLabel}
             </span>
-            <span className="hover:text-white transition-colors">Click to flip ↻</span>
+            <span className="group-hover:text-amber-300 transition-colors flex items-center gap-1 font-semibold text-white/70">
+              Click to flip back ↻
+            </span>
           </div>
         </div>
       </div>
