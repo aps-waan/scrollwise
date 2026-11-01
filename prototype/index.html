@@ -1,0 +1,831 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ScrollWise — Micro-Learning & Mental Models Feed</title>
+  <meta name="description" content="ScrollWise converts passive social media doomscrolling into high-yield 30-second mental model cards and active recall checks.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- LOGIN VIEW -->
+  <section id="loginView" class="view login-view">
+    <div class="login-container">
+      <div class="login-panel">
+        <div class="brand-crest">
+          <div class="brand-seal">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+          </div>
+          <div class="brand-text-lockup">
+            <div class="brand-word">Scroll<span>Wise</span></div>
+            <div class="edition-label">CAMPUS STUDY EDITION</div>
+          </div>
+        </div>
+
+        <div class="login-editorial-copy">
+          <div class="kicker-tag">MICRO-LEARNING FEED</div>
+          <h1>Turn study break scrolling into <em>high-yield retention.</em></h1>
+          <p class="subcopy">Swap algorithmic doomscrolling for 30-second mental model cards and active recall tests distilled from seminal non-fiction.</p>
+        </div>
+
+        <form id="loginForm" class="editorial-form">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <div class="input-wrap">
+              <input id="email" type="email" placeholder="student@university.edu" value="student@university.edu" required autocomplete="email">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+              <input id="password" type="password" placeholder="••••••••" value="studywise" minlength="4" required autocomplete="current-password">
+            </div>
+          </div>
+
+          <button class="primary enter-btn" type="submit">
+            <span>Enter ScrollWise</span>
+            <svg class="btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+        </form>
+
+        <div class="login-foot">
+          <span class="lock-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          </span>
+          <span>Prototype mode • Your data stays on this device</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- APP VIEW -->
+  <section id="appView" class="view app-view hidden">
+    <!-- APP HEADER -->
+    <header class="app-header">
+      <div class="header-left">
+        <button class="brand-lockup" data-nav="home" aria-label="ScrollWise Home">
+          <div class="brand-mark small">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+          </div>
+          <div class="brand-title-wrap">
+            <div class="brand-word small">Scroll<span>Wise</span></div>
+            <span class="header-edition-badge">DAILY EDITION</span>
+          </div>
+        </button>
+      </div>
+
+      <div class="header-center-info">
+        <span class="catalog-hint">Curated Mental Models</span>
+      </div>
+
+      <div class="header-actions">
+        <!-- Reading Theme Switcher -->
+        <div class="theme-switcher-wrap" title="Switch study theme">
+          <button id="themeToggleBtn" class="circle-btn theme-toggle-btn" aria-label="Toggle Theme">
+            <svg class="theme-icon-night" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          </button>
+          <div id="themeMenu" class="theme-menu hidden">
+            <div class="theme-menu-title">STUDY THEME</div>
+            <button class="theme-opt active" data-theme-val="dark">
+              <span class="theme-swatch swatch-dark"></span>
+              <span>Campus Dark</span>
+              <span class="opt-check">✓</span>
+            </button>
+            <button class="theme-opt" data-theme-val="light">
+              <span class="theme-swatch swatch-light"></span>
+              <span>Campus Light</span>
+              <span class="opt-check">✓</span>
+            </button>
+            <button class="theme-opt" data-theme-val="warm">
+              <span class="theme-swatch swatch-warm"></span>
+              <span>Late Night Study</span>
+              <span class="opt-check">✓</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Search Button -->
+        <button id="searchBtn" class="circle-btn" title="Search concepts & models (⌘K / /)" aria-label="Search concepts">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+
+        <!-- Logout Button -->
+        <button id="logoutBtn" class="circle-btn" title="Log out" aria-label="Log out">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- SEARCH DRAWER OVERLAY -->
+    <div id="searchOverlay" class="search-overlay hidden">
+      <div class="search-modal-box">
+        <div class="search-input-row">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input id="quickSearchInput" type="text" placeholder="Search concepts, authors, or course tags (e.g. Bias, Wealth, Kahneman)..." autocomplete="off">
+          <button id="closeSearchBtn" class="search-esc-btn">ESC</button>
+        </div>
+        <div id="searchResultsList" class="search-results-list">
+          <div class="search-prompt-hint">Type to search mental models, textbooks, and key concepts</div>
+        </div>
+      </div>
+    </div>
+
+    <main class="app-main">
+      <!-- HOME FEED PAGE -->
+      <section id="homePage" class="page active">
+        <!-- Feed Top Banner -->
+        <div class="feed-intro">
+          <div class="feed-intro-text">
+            <div class="folio-kicker">
+              <span class="bullet-dot"></span>
+              <span class="tiny-label">DAILY STUDY FEED · 6 CONCEPTS</span>
+            </div>
+            <h2>One scroll.<br><span>One high-yield concept.</span></h2>
+          </div>
+          <div class="feed-intro-actions">
+            <button class="ghost-btn icon-text-btn" data-nav="discover">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              <span>Browse All Subjects</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Banner -->
+        <div id="filterStrip" class="hidden filter-strip">
+          <div class="filter-strip-inner">
+            <div class="filter-tag-pill">
+              <span class="filter-icon">🏷</span>
+              <span id="filterLabel">Filtered view</span>
+            </div>
+            <button id="clearFilter" class="ghost-btn clear-filter-btn">
+              <span>Show All Concepts</span>
+              <span class="clear-x">×</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Desktop Deck Navigation Rail -->
+        <nav class="desktop-folio-rail" aria-label="Deck quick navigation">
+          <div class="rail-title">DECK</div>
+          <div class="rail-items">
+            <button class="rail-item active" data-card-idx="0" title="Card 01: Welcome">
+              <span class="rail-num">01</span>
+              <span class="rail-bar"></span>
+            </button>
+            <button class="rail-item" data-card-idx="1" title="Card 02: Psychology">
+              <span class="rail-num">02</span>
+              <span class="rail-bar"></span>
+            </button>
+            <button class="rail-item" data-card-idx="2" title="Card 03: Money">
+              <span class="rail-num">03</span>
+              <span class="rail-bar"></span>
+            </button>
+            <button class="rail-item" data-card-idx="3" title="Card 04: Habits">
+              <span class="rail-num">04</span>
+              <span class="rail-bar"></span>
+            </button>
+            <button class="rail-item" data-card-idx="4" title="Card 05: Business">
+              <span class="rail-num">05</span>
+              <span class="rail-bar"></span>
+            </button>
+            <button class="rail-item" data-card-idx="5" title="Card 06: Active Recall">
+              <span class="rail-num">06</span>
+              <span class="rail-bar"></span>
+            </button>
+          </div>
+          <div class="rail-keyboard-hint">↓ ↑ or J K</div>
+        </nav>
+
+        <!-- FEED CONTAINER -->
+        <div id="feed" class="feed">
+          <div id="topicEmptyState" class="empty-state hidden">
+            <div class="empty-icon">📚</div>
+            <h3>No cards found in this subject module yet</h3>
+            <p>Our student curriculum team is actively uploading new mental models for this domain.</p>
+            <button class="ghost-btn" onclick="clearTopicFilter()">Return to all cards</button>
+          </div>
+
+          <!-- CARD 01: INTRO -->
+          <article class="idea-card accent-card" data-index="0">
+            <div class="card-top">
+              <div class="folio-tag-group">
+                <span class="folio-seq">CARD · 01</span>
+                <span class="pill">ORIENTATION</span>
+                <span class="meta-tag">START HERE</span>
+              </div>
+              <div class="card-pagination">01 / 06</div>
+            </div>
+
+            <div class="card-center">
+              <div class="tiny-label">THE SCROLLWISE CONCEPT</div>
+              <h3 class="folio-headline">Small ideas compound into big decisions.</h3>
+              <p class="folio-body">Most student phone usage during study breaks is passive algorithmic doomscrolling (TikTok, Reels, Shorts) which increases cognitive load. ScrollWise recalibrates 5-minute study breaks into bite-sized mental model retention.</p>
+              
+              <div class="card-key-takeaway">
+                <div class="takeaway-badge">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  <span>HOW TO USE SCROLLWISE</span>
+                </div>
+                <p>Scroll down or use <strong>J / K keys</strong> to review concept cards. Tap <strong>Save to Deck</strong> to bookmark cards for exam prep. Tap <strong>Read Notes</strong> for deep-dive textbook breakdowns.</p>
+              </div>
+
+              <div class="source-line">
+                <span class="source-colophon">SCROLLWISE</span> · STUDENT STUDY LAB
+              </div>
+            </div>
+
+            <div class="card-footer">
+              <span class="scroll-cue">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+                <span>Scroll down for next study card</span>
+              </span>
+              <span class="card-counter-tag">Card 1 of 6</span>
+            </div>
+          </article>
+
+          <!-- CARD 02: PSYCHOLOGY -->
+          <article class="idea-card" data-topic="Psychology" data-index="1">
+            <div class="card-top">
+              <div class="folio-tag-group">
+                <span class="folio-seq">CARD · 02</span>
+                <span class="pill topic-psych">🧠 PSYCH 101</span>
+                <span class="meta-tag">COGNITIVE BIAS</span>
+              </div>
+              <div class="card-pagination">02 / 06</div>
+            </div>
+
+            <div class="card-center">
+              <div class="tiny-label">CONFIRMATION BIAS · DUAL PROCESS THEORY</div>
+              <h3 class="folio-headline">We notice evidence that agrees with us more easily than evidence that challenges us.</h3>
+              <p class="folio-body">When researching a term paper or evaluating an opinion, your mind instinctively searches for sources that confirm what you already believe. To build genuine academic rigor, deliberately look for data that could prove your premise wrong.</p>
+
+              <div class="card-key-takeaway">
+                <div class="takeaway-badge">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
+                  <span>STUDY & RESEARCH APPLICATION</span>
+                </div>
+                <p>Before submitting any major research essay, write down: <em>"What is the single strongest counter-evidence against my argument, and how does my thesis hold up?"</em></p>
+              </div>
+
+              <div class="source-line">
+                <svg class="book-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10"></path></svg>
+                <span>Required Reading: <strong>Thinking, Fast and Slow</strong> · Daniel Kahneman</span>
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <button class="action save" title="Save to Study Deck" aria-label="Save idea">
+                <span class="action-icon">♡</span>
+                <span class="action-text">Save to Deck</span>
+              </button>
+              <button class="action share-btn" title="Copy note to clipboard" aria-label="Copy note">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span class="action-text">Copy Note</span>
+              </button>
+              <button class="detail-btn" data-detail="confirmation">
+                <span>Read Notes</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </button>
+            </div>
+          </article>
+
+          <!-- CARD 03: MONEY -->
+          <article class="idea-card alt" data-topic="Money" data-index="2">
+            <div class="card-top">
+              <div class="folio-tag-group">
+                <span class="folio-seq">CARD · 03</span>
+                <span class="pill topic-money">💰 APPLIED ECON</span>
+                <span class="meta-tag">FINANCIAL LITERACY</span>
+              </div>
+              <div class="card-pagination">03 / 06</div>
+            </div>
+
+            <div class="card-center">
+              <div class="tiny-label">WEALTH ≠ INCOME · OPTIONALITY</div>
+              <h3 class="folio-headline">What you earn tells you about income. What you keep tells you about wealth.</h3>
+              <p class="folio-body">Starting salaries are visible and easily spent. Wealth is the silent margin — the unspent emergency cushion that gives you leverage to decline toxic jobs, negotiate better offers, and own your schedule after graduation.</p>
+
+              <div class="card-key-takeaway">
+                <div class="takeaway-badge">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  <span>EARLY CAREER RULE</span>
+                </div>
+                <p>Avoid lifestyle inflation when entering the job market: maintaining low fixed expenses for 24 months creates compound optionality that outlasts any luxury purchase.</p>
+              </div>
+
+              <div class="source-line">
+                <svg class="book-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10"></path></svg>
+                <span>Recommended Reading: <strong>The Psychology of Money</strong> · Morgan Housel</span>
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <button class="action save" title="Save to Study Deck" aria-label="Save idea">
+                <span class="action-icon">♡</span>
+                <span class="action-text">Save to Deck</span>
+              </button>
+              <button class="action share-btn" title="Copy note to clipboard" aria-label="Copy note">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span class="action-text">Copy Note</span>
+              </button>
+              <button class="detail-btn" data-detail="wealth">
+                <span>Read Notes</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </button>
+            </div>
+          </article>
+
+          <!-- CARD 04: HABITS -->
+          <article class="idea-card warm" data-topic="Habits" data-index="3">
+            <div class="card-top">
+              <div class="folio-tag-group">
+                <span class="folio-seq">CARD · 04</span>
+                <span class="pill topic-habits">⚡ STUDY HABITS</span>
+                <span class="meta-tag">BEHAVIORAL ARCHITECTURE</span>
+              </div>
+              <div class="card-pagination">04 / 06</div>
+            </div>
+
+            <div class="card-center">
+              <div class="tiny-label">SYSTEMS OVER GOALS · RECURSION</div>
+              <h3 class="folio-headline">A goal tells you where you want to go. A system determines what you do repeatedly.</h3>
+              <p class="folio-body">Wanting a 4.0 GPA is a goal. Setting a daily 50-minute library focus block at 9 AM is a system. You do not rise to the level of your goals; you fall to the level of your study systems.</p>
+
+              <div class="card-key-takeaway">
+                <div class="takeaway-badge">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+                  <span>STUDENT STUDY HACK · FRICTION INVERSION</span>
+                </div>
+                <p>Put your phone in another room while studying (adds 20 seconds of friction). Bookmark your assignment tabs on your desktop (removes 2 clicks of friction).</p>
+              </div>
+
+              <div class="source-line">
+                <svg class="book-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10"></path></svg>
+                <span>Required Reading: <strong>Atomic Habits</strong> · James Clear</span>
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <button class="action save" title="Save to Study Deck" aria-label="Save idea">
+                <span class="action-icon">♡</span>
+                <span class="action-text">Save to Deck</span>
+              </button>
+              <button class="action share-btn" title="Copy note to clipboard" aria-label="Copy note">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span class="action-text">Copy Note</span>
+              </button>
+              <button class="detail-btn" data-detail="systems">
+                <span>Read Notes</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </button>
+            </div>
+          </article>
+
+          <!-- CARD 05: BUSINESS -->
+          <article class="idea-card" data-topic="Business" data-index="4">
+            <div class="card-top">
+              <div class="folio-tag-group">
+                <span class="folio-seq">CARD · 05</span>
+                <span class="pill topic-biz">🚀 ENTREPRENEURSHIP</span>
+                <span class="meta-tag">STRATEGY & PRODUCT</span>
+              </div>
+              <div class="card-pagination">05 / 06</div>
+            </div>
+
+            <div class="card-center">
+              <div class="tiny-label">CREATE, DON'T JUST COMPETE · ZERO TO ONE</div>
+              <h3 class="folio-headline">A new category can matter more than fighting harder inside an old one.</h3>
+              <p class="folio-body">Copying established competitors forces you to fight for tiny fractional margins. Real innovation happens when a student project solves an unsolved pain point so distinctively that it creates its own new category.</p>
+
+              <div class="card-key-takeaway">
+                <div class="takeaway-badge">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  <span>STUDENT PROJECT PRINCIPLE</span>
+                </div>
+                <p>Do not build a generic clone of an existing app. Solve a hyper-specific student friction (like short-form micro-learning) 10x better than existing tools.</p>
+              </div>
+
+              <div class="source-line">
+                <svg class="book-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10"></path></svg>
+                <span>Recommended Reading: <strong>Zero to One</strong> · Peter Thiel</span>
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <button class="action save" title="Save to Study Deck" aria-label="Save idea">
+                <span class="action-icon">♡</span>
+                <span class="action-text">Save to Deck</span>
+              </button>
+              <button class="action share-btn" title="Copy note to clipboard" aria-label="Copy note">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span class="action-text">Copy Note</span>
+              </button>
+              <button class="detail-btn" data-detail="create">
+                <span>Read Notes</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </button>
+            </div>
+          </article>
+
+          <!-- CARD 06: QUIZ -->
+          <article class="idea-card quiz-card" data-index="5">
+            <div class="card-top">
+              <div class="folio-tag-group">
+                <span class="folio-seq">CARD · 06</span>
+                <span class="pill topic-quiz">🎯 ACTIVE RECALL CHECK</span>
+                <span class="meta-tag">SPACED RETRIEVAL</span>
+              </div>
+              <div class="card-pagination">06 / 06</div>
+            </div>
+
+            <div class="card-center">
+              <div class="tiny-label">CHECKPOINT QUIZ · TESTING EFFECT</div>
+              <h3 class="folio-headline">Which action best counters confirmation bias?</h3>
+              <p class="quiz-subtext">Passive reading fades quickly. In cognitive psychology, active retrieval practice produces up to 50% higher long-term retention than re-reading.</p>
+
+              <div class="quiz">
+                <button class="quiz-option" data-correct="false">
+                  <span class="option-key">A</span>
+                  <span class="option-text">Only read commentary and research you already fundamentally agree with.</span>
+                </button>
+                <button class="quiz-option" data-correct="true">
+                  <span class="option-key">B</span>
+                  <span class="option-text">Actively search for disconfirming evidence that could falsify your hypothesis.</span>
+                </button>
+                <button class="quiz-option" data-correct="false">
+                  <span class="option-key">C</span>
+                  <span class="option-text">Postpone every decisive strategic move until complete public consensus is achieved.</span>
+                </button>
+              </div>
+
+              <div id="quizFeedback" class="quiz-feedback" aria-live="polite"></div>
+            </div>
+
+            <div class="card-footer">
+              <span class="quiz-note-text">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+                <span>Active recall check • Results logged to Student Progress Ledger</span>
+              </span>
+              <span class="card-counter-tag">Deck Complete</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- DISCOVER PAGE (COURSE MODULES & TEXTBOOKS) -->
+      <section id="discoverPage" class="page">
+        <div class="page-heading">
+          <div class="folio-kicker">
+            <span class="bullet-dot"></span>
+            <span class="tiny-label">COURSE SYLLABUS & DISCIPLINES</span>
+          </div>
+          <h2>Explore by<br><span>academic module.</span></h2>
+          <p>Filter the daily feed by subject or inspect unabridged course seminar texts directly in the prototype.</p>
+        </div>
+
+        <div class="discover-section-title">
+          <span>ACADEMIC DISCIPLINES (FILTER FEED)</span>
+          <div class="title-line"></div>
+        </div>
+
+        <div class="topic-grid">
+          <button class="topic-card topic-psych" data-topic="Psychology">
+            <div class="topic-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"></circle><path d="M2 12c2.5-5 6.5-8 10-8s7.5 3 10 8c-2.5 5-6.5 8-10 8s-7.5-3-10-8Z"></path></svg>
+            </div>
+            <div class="topic-title">Psychology (101)</div>
+            <small>Cognitive biases, System 1 & 2 heuristics, decision traps</small>
+            <div class="topic-meta-row">
+              <span class="topic-count">4 Concepts</span>
+              <span class="topic-arrow">Filter Feed →</span>
+            </div>
+          </button>
+
+          <button class="topic-card topic-money" data-topic="Money">
+            <div class="topic-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+            <div class="topic-title">Applied Economics (204)</div>
+            <small>Wealth dynamics, compounding, financial autonomy</small>
+            <div class="topic-meta-row">
+              <span class="topic-count">3 Concepts</span>
+              <span class="topic-arrow">Filter Feed →</span>
+            </div>
+          </button>
+
+          <button class="topic-card topic-biz" data-topic="Business">
+            <div class="topic-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            </div>
+            <div class="topic-title">Strategy & Startups (310)</div>
+            <small>Zero to One, category creation, moats, distribution</small>
+            <div class="topic-meta-row">
+              <span class="topic-count">3 Concepts</span>
+              <span class="topic-arrow">Filter Feed →</span>
+            </div>
+          </button>
+
+          <button class="topic-card topic-habits" data-topic="Habits">
+            <div class="topic-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M16 21h5v-5"></path></svg>
+            </div>
+            <div class="topic-title">Study Habits (Design)</div>
+            <small>Friction inversion, cue-routine-reward, deep work</small>
+            <div class="topic-meta-row">
+              <span class="topic-count">4 Concepts</span>
+              <span class="topic-arrow">Filter Feed →</span>
+            </div>
+          </button>
+
+          <button class="topic-card topic-philo" data-topic="Philosophy">
+            <div class="topic-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 18h16M7 6v12M12 6v12M17 6v12"></path></svg>
+            </div>
+            <div class="topic-title">Philosophy (105)</div>
+            <small>First principles, Stoic resilience, Occam's razor</small>
+            <div class="topic-meta-row">
+              <span class="topic-count">2 Concepts</span>
+              <span class="topic-arrow">Filter Feed →</span>
+            </div>
+          </button>
+
+          <button class="topic-card topic-sci" data-topic="Science">
+            <div class="topic-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(45 12 12)"></ellipse><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-45 12 12)"></ellipse><circle cx="12" cy="12" r="2"></circle></svg>
+            </div>
+            <div class="topic-title">Cognitive Science (220)</div>
+            <small>Dual coding, spaced repetition, memory consolidation</small>
+            <div class="topic-meta-row">
+              <span class="topic-count">3 Concepts</span>
+              <span class="topic-arrow">Filter Feed →</span>
+            </div>
+          </button>
+        </div>
+
+        <div class="discover-section-title" style="margin-top: 36px;">
+          <span>FEATURED SEMINAR TEXTS & READINGS</span>
+          <div class="title-line"></div>
+        </div>
+
+        <div class="featured-books">
+          <!-- BOOK 1: THINKING FAST AND SLOW -->
+          <div class="featured-book" data-title="Thinking, Fast and Slow" role="button" tabindex="0">
+            <div class="featured-book-image-wrap">
+              <img src="book-cover.png" alt="Thinking, Fast and Slow book cover" loading="lazy">
+              <div class="book-spine-shine"></div>
+            </div>
+            <div class="featured-book-copy">
+              <div class="tiny-label">PSYCHOLOGY DEPT · CORE TEXT</div>
+              <h3>Thinking, Fast and Slow</h3>
+              <p class="author-name">Daniel Kahneman (Nobel Laureate)</p>
+              <p class="book-synopsis">Foundational psychology research examining the duality between intuitive System 1 heuristics and deliberate System 2 logical processing.</p>
+              <span class="book-cta-link">
+                <span>Filter feed for this book</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- BOOK 2: 48 LAWS OF POWER (PDF READER) -->
+          <div class="featured-book power-book" data-pdf="48-laws-of-power.pdf" data-title="The 48 Laws of Power" role="button" tabindex="0">
+            <div class="power-cover" aria-label="The 48 Laws of Power book cover">
+              <div class="power-cover-top">ROBERT GREENE</div>
+              <div class="power-cover-title">THE 48<br>LAWS OF<br>POWER</div>
+              <div class="power-cover-bottom">STRATEGY & HISTORICAL ANALYSIS</div>
+              <div class="book-spine-shine"></div>
+            </div>
+            <div class="featured-book-copy">
+              <div class="tiny-label">STRATEGY SEMINAR · COURSE PDF</div>
+              <h3>The 48 Laws of Power</h3>
+              <p class="author-name">Robert Greene</p>
+              <p class="book-synopsis">Historical case studies analyzing political maneuvers, strategic power dynamics, and human behavior through Machiavelli and Sun Tzu.</p>
+              <span class="book-cta-link read-pdf-cta">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                <span>Open Full Course PDF Reader →</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SAVED / STUDY DECK -->
+      <section id="savedPage" class="page">
+        <div class="page-heading">
+          <div class="folio-kicker">
+            <span class="bullet-dot"></span>
+            <span class="tiny-label">PERSONAL STUDY REPOSITORY</span>
+          </div>
+          <h2>My Study<br><span>Deck.</span></h2>
+          <p>Your saved high-yield mental models for quick revision before exams, presentations, and interviews.</p>
+        </div>
+
+        <div class="saved-actions-bar">
+          <div class="saved-count-indicator">
+            <span id="savedDeckCount">0</span> cards saved in your deck
+          </div>
+          <button id="exportNotesBtn" class="ghost-btn icon-text-btn" title="Export study notes as text">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>Export Notes (Markdown)</span>
+          </button>
+        </div>
+
+        <div id="savedList" class="saved-list">
+          <div class="empty-state">
+            <div class="empty-icon">📖</div>
+            <h3>Your Study Deck is empty</h3>
+            <p>While scrolling through the daily feed, tap <strong>Save to Deck</strong> on any card to bookmark concepts here for quick exam review.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROFILE / STUDENT LEARNING DASHBOARD -->
+      <section id="profilePage" class="page">
+        <div class="profile-card">
+          <div class="profile-header-strip">
+            <div class="avatar-seal">
+              <span>🎓</span>
+            </div>
+            <div class="profile-title-block">
+              <div class="tiny-label">YOUR PROGRESS</div>
+              <h2>Student Learning Dashboard</h2>
+              <div class="profile-member-status">ScrollWise Reader • Active</div>
+            </div>
+          </div>
+
+          <div class="stats">
+            <div class="stat-box">
+              <div class="stat-top">
+                <span class="stat-icon">🔥</span>
+                <span class="stat-tag">STREAK</span>
+              </div>
+              <strong id="streakStat">3 Days</strong>
+              <span>Study Streak</span>
+            </div>
+            <div class="stat-box">
+              <div class="stat-top">
+                <span class="stat-icon">📚</span>
+                <span class="stat-tag">REVIEWED</span>
+              </div>
+              <strong id="viewedStat">5</strong>
+              <span>Cards Reviewed</span>
+            </div>
+            <div class="stat-box">
+              <div class="stat-top">
+                <span class="stat-icon">🔖</span>
+                <span class="stat-tag">SAVED</span>
+              </div>
+              <strong id="savedStat">0</strong>
+              <span>Study Deck Cards</span>
+            </div>
+            <div class="stat-box">
+              <div class="stat-top">
+                <span class="stat-icon">🎯</span>
+                <span class="stat-tag">RECALL</span>
+              </div>
+              <strong id="scoreStat">0%</strong>
+              <span>Quiz Retention Accuracy</span>
+            </div>
+          </div>
+
+          <div class="profile-curator-note">
+            <div class="curator-quote-mark">💡</div>
+            <p>"Spaced retrieval practice produces up to 50% higher long-term retention compared to repeated passive re-reading of textbooks."</p>
+            <div class="curator-attribution">— Roediger & Karpicke, Cognitive Psychology Research</div>
+          </div>
+
+          <div class="profile-domain-balance">
+            <div class="domain-balance-title">SUBJECT MASTERY BREAKDOWN</div>
+            <div class="balance-bars">
+              <div class="balance-item">
+                <div class="balance-info"><span>Psychology & Heuristics</span><span>40%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width: 40%; background: var(--accent);"></div></div>
+              </div>
+              <div class="balance-item">
+                <div class="balance-info"><span>Applied Economics & Wealth</span><span>25%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width: 25%; background: var(--topic-money);"></div></div>
+              </div>
+              <div class="balance-item">
+                <div class="balance-info"><span>Study Habits & Friction Systems</span><span>20%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width: 20%; background: var(--topic-habits);"></div></div>
+              </div>
+              <div class="balance-item">
+                <div class="balance-info"><span>Business Strategy & Startups</span><span>15%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width: 15%; background: var(--topic-biz);"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- STUDENT BOTTOM NAVIGATION -->
+    <nav class="bottom-nav" aria-label="Main Navigation">
+      <button class="nav-btn active" data-nav="home">
+        <span class="nav-icon-wrap">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10"></path></svg>
+        </span>
+        <span class="nav-text">Daily Feed</span>
+      </button>
+
+      <button class="nav-btn" data-nav="discover">
+        <span class="nav-icon-wrap">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </span>
+        <span class="nav-text">Modules</span>
+      </button>
+
+      <button class="nav-btn" data-nav="saved">
+        <span class="nav-icon-wrap">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg>
+        </span>
+        <span class="nav-text">Study Deck</span>
+      </button>
+
+      <button class="nav-btn" data-nav="profile">
+        <span class="nav-icon-wrap">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </span>
+        <span class="nav-text">Progress</span>
+      </button>
+    </nav>
+  </section>
+
+  <!-- DETAIL MODAL: STUDY NOTES & BREAKDOWN -->
+  <div id="detailModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <button id="closeModal" class="close-btn" aria-label="Close detail modal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      
+      <div class="modal-kicker-row">
+        <span class="pill modal-pill">STUDY NOTES</span>
+        <span class="modal-fol-no">TEXTBOOK DEEP DIVE</span>
+      </div>
+
+      <h2 id="detailTitle">Confirmation Bias</h2>
+      
+      <div class="modal-body-scroll">
+        <p id="detailText"></p>
+        
+        <div class="detail-box">
+          <div class="detail-box-head">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <div class="tiny-label">STUDENT TAKEAWAY</div>
+          </div>
+          <p id="detailTakeaway"></p>
+        </div>
+
+        <div class="source-line" id="detailSource"></div>
+      </div>
+
+      <div class="modal-footer-action-row">
+        <button id="copyModalTakeawayBtn" class="ghost-btn icon-text-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <span>Copy Takeaway</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PDF MODAL: FULL COURSE BOOK READER -->
+  <div id="pdfModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="pdfModalTitle">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card pdf-modal-card">
+      <div class="pdf-modal-head">
+        <div>
+          <div class="tiny-label">SEMINAR READING · FACSIMILE PDF</div>
+          <h2 id="pdfModalTitle">The 48 Laws of Power</h2>
+        </div>
+        <button id="closePdfModal" class="close-btn" aria-label="Close book reader">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <iframe id="pdfFrame" title="Book PDF Reader"></iframe>
+
+      <div class="pdf-modal-foot">
+        <span class="pdf-notice">Complete unabridged facsimile edition • Robert Greene</span>
+        <a id="pdfOpenNewTab" href="#" target="_blank" rel="noopener" class="pdf-open-link">
+          <span>Open in dedicated browser tab</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+      </div>
+      
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
